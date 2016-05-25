@@ -1,0 +1,273 @@
+
+<html>
+<meta charset="utf-8">
+<head>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/form.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>	
+	<script src="js/mascara.js"></script>
+	<script src="js/selecao.js"></script>
+	<script src="js/validate.js"></script>
+
+
+</head>
+		
+	<title>Registro AllDispor</title>
+	
+<body>
+
+<form class="form-horizontal">
+<fieldset>
+<div id="content"><br>
+<center><h2> Registro de Usuário AllDispor</h2></center><br>
+
+
+<div class="form-group">
+  <label class="col-md-3 control-label" for="radios">Você é:</label>
+  <div class="campo"> 
+    <label class="radio-inline" for="radios-0">
+    <input type="radio" name="tipos" value="instituicao" checked>
+       Instituição de Ensino
+    </label> 
+    <label class="radio-inline" for="radios-1">
+    <input type="radio" name="tipos" value="saude">
+      Saude em Geral
+    </label> 
+    <label class="radio-inline" for="radios-2">
+      <input type="radio" name="tipos" id="apoio" value="apoio">
+     Local de apoio
+    </label> 
+	
+	<br><center>
+    <label class="radio-inline" for="radios-3">
+    <input type="radio" name="tipos" value="geral">
+      Estabelecimento (Geral)
+    </label>
+    <label class="radio-inline" for="radios-4">
+    <input type="radio" name="tipos" value="rh">
+      Recursos Humanos
+    </label></center>
+	
+  </div>
+</div>
+
+<!-- Select tipo de local --> 
+<div class="form-group">
+  <label class="col-md-3 control-label" for="selectbasic">Tipo: *</label>
+  <div class="col-md-3">
+    <select id="tipos" name="" class="form-control">
+      <option value="normal">Normal</option>
+      <option value="tecnico">Tecnico</option>
+	  <option value="superior">Superior</option>
+	    
+    </select>
+  </div>
+</div>
+
+
+<!-- nome empresa-->
+<div class="form-group">
+  <label class="col-md-3 control-label" for="textinput">Razão Social: * </label> 
+  <div class="col-md-7">
+  <input id="textinput" name="textinput" type="text"  class="form-control input-md "required>
+  
+  </div>
+</div>
+
+<!-- cnpj-->
+<div class="form-group">
+  <label class="col-md-3 control-label" for="textinput">CNPJ: * </label>  
+  <div class="col-md-4">
+ <input type="text" name="cnpj" id="cnpj" onkeyup="FormataCnpj(this,event)" maxlength="18"  class="form-control input-md"required />  
+</div>
+</div>
+
+
+<!-- rua-->
+<div class="form-group">
+  <label class="col-md-3 control-label" for="textinput">Rua: * </label>  
+  <div class="col-md-7">
+  <input id="textinput" name="textinput" type="text"  class="form-control input-md"required>
+  </div>
+  </div>
+  
+  <!-- numero --> 
+  <div class="form-group">
+  <label class="col-md-3 control-label" for="textinput">Numero: * </label>  
+  <div class="col-md-2">
+  <input id="textinput" name="textinput" type="text"  class="form-control input-md"required>
+  </div>
+  
+  <!-- bairro --> 
+  <label class="col-md-1 control-label" for="textinput">Bairro:* </label>  
+  <div class="col-md-4">
+  <input id="textinput" name="textinput" type="text"  class="form-control input-md"required>
+  </div>
+  </div>
+
+<!-- cep --> 
+<div class="form-group">
+  <label class="col-md-3 control-label" for="textinput">CEP: * </label>  
+  <div class="col-md-2">
+  <input type="text" name="cep" onkeypress="mascara(this, '#####-###')" maxlength="9" class="form-control input-md" required>
+  </div>
+
+  <!-- Cidade --> 
+  <label class="col-md-1 control-label" for="textinput">Cidade:* </label>  
+  <div class="col-md-4">
+  <input id="textinput" name="textinput" type="text" class="form-control input-md" required>
+  </div>
+</div>
+
+<!-- Select Estado --> 
+<div class="form-group">
+  <label class="col-md-3 control-label" for="estado">Estado: * </label>
+  <div class="col-md-4">
+    <select id="estado" name="estado" class="form-control">
+      <option value="sp">São Paulo</option>
+      <option value="rs">Rio Grande do Sul</option>
+    </select>
+  </div>
+</div>
+
+<!-- Telefone 1 --> 
+<div class="form-group">
+  <label class="col-md-3 control-label" for="textinput">Telefone 1: *</label>  
+  <div class="col-md-3">
+  <input type="tel" name="telefone" onkeypress="mascara(this, '## ####-####')" maxlength="12" class="form-control input-md" required>
+  </div>
+
+  <!-- Telefone 2 nao obrigatorio --> 
+  <label class="col-md-1 control-label" for="textinput">Telefone 2:</label>  
+  <div class="col-md-3">
+	<input type="tel" name="telefone" onkeypress="mascara(this, '## ####-####')"  maxlength="12" class="form-control input-md">  </div>
+</div>
+
+<!-- Site - nao obrigatorio --> 
+<div class="form-group" id="frm" name="frm" method="post" action="">
+  <label class="col-md-3 control-label" for="textinput">Site:</label>  
+  <div class="col-md-7">
+	<input type="textinput" name="site"  class="form-control input-md">  </div>
+</div>
+
+
+<br><center><h2>Detalhes de Acessibilidade do Local</h2></center><br>
+
+<!-- Select item --> 
+<div class="form-group">
+  <label class="col-md-3 control-label" for="selectbasic">Item: *</label>
+  <div class="col-md-3">
+    <select id="selectbasic" name="selectbasic" onchange='mostraCampo(this)' class="form-control">
+      <option value="Banheiro">Banheiro</option>
+      <option value="Rampa">Rampa</option>
+	  <option value="Elevador">Elevador</option>
+	  <option value="Vaga de Estacionamento">Vaga de Estacionamento</option>
+	  <option value="Outros">Outros</option>	  
+    </select>
+  </div>
+  
+  <!-- Input Outros --> 
+ 
+  <div class="col-md-3">
+	<input type="textinput" id="outros" style='display:none' class="form-control input-md" placeholder = "Escreva Item" >  </div>
+  </div>
+  
+
+<!-- Quantidade Item --> 
+<div class="form-group">
+<label class="col-md-3 control-label" for="textinput">Quantidade: *</label>  
+  <div class="col-md-4">
+  <input id="quantidade" name="textinput" type="number" class="form-control input-md">
+  </div></div>
+
+  <!-- Destalhes do item --> 
+<div class="form-group">
+  <label class="col-md-3 control-label" for="textarea">Detalhes do item: *</label>
+  <div class="col-md-5">                     
+    <textarea class="form-control" id="descricao" name="descricao" placeholder="Tamanho, inclinação..."></textarea>
+  </div>
+</div>
+
+
+<!-- Enviar arquivo --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="filebutton">Imagem de estrutura do local:</label>
+  <div class="col-md-4">
+    <input id="filebutton" name="filebutton" class="input-file" type="file">
+  </div>
+</div>
+
+
+<center>
+  <button type="button" class="btn btn-info" id="add">Adicionar mais itens</button>
+</center>
+
+
+
+<br>
+<center><h2>Dados de Acesso</h2></center><br>
+
+
+<div class="form-group">
+    <label class="col-md-4 control-label"  for="exampleInputEmail1">Email: *</label>
+	<div class="col-md-5">
+    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" required>
+  </div></div>
+  
+  <div class="form-group">
+    <label class="col-md-4 control-label"  for="exampleInputPassword1">Senha: *</label>
+	<div class="col-md-3">
+    <input type="password" class="form-control senha" id="senha" name = "senha" placeholder="Senha" required>
+  </div>
+  
+  </div>
+  
+  <div class="form-group">
+    <label class="col-md-4 control-label"  for="exampleInputPassword1">Confirmar Senha: *</label>
+	<div class="col-md-3">
+    <input type="password" class="form-control senha" id="confirar_senha" name = "confirmar_senha" placeholder="Repita Senha" oninput="check(this)" required >
+  </div>
+  </div>
+
+  <center><button type="submit" class="btn btn-info" id="enviar">Salvar Dados</button>      <a href="index.html"><button type="cancel" class="btn btn-danger">Cancelar</a></button>
+</center></div>
+<script src="js/jquery.js"></script>
+<script>
+$(document).ready(function(){
+var recursos = [];
+var recurso = {nome:'',descricao: '', quantidade:''}
+
+$("#add").click(function(){
+debugger
+alert($("#selectbasic", "#descricao").val());
+	recurso = { nome:$("#selectbasic").val(), 
+				descricao: $("#descricao").val(),
+				quantidade: $("#quantidade").val()
+			  };  
+	alert(recurso.nome);
+	recursos.push(recurso);
+	$("#nome").val(""); 
+	$("#descricao").val("");
+	$("#quantidade").val("");
+});
+
+$("#enviar").click(function(){
+	if($(".senha").val().length > 6){
+		alert("Senha não pode ser maior que 6 caracteres");
+	}
+});
+});
+
+
+ 
+</script> 
+<script src="js/selecao.js"></script>
+<script src="js/mascara.js"></script>
+
+</fieldset>
+</form>
+</body>
+
+
+</html>
+
