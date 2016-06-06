@@ -1,22 +1,30 @@
 
-<html>
+<html  ng-app="app">
 <meta charset="utf-8">
 <head>
-<link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/form.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>	
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="js/mascara.js"></script>
 	<script src="js/selecao.js"></script>
 	<script src="js/validate.js"></script>
+	<!-- angular -->
+	<script src="js/angular.js"></script>
 
+	<script src="js/app.js"></script>
+	<script src="services/cadastroApi.js"></script>
+	<script src="controllers/cadastroController.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/servicos.js"></script>
 
 </head>
-		
+
 	<title>Registro AllDispor</title>
-	
+
 <body>
 
-<form class="form-horizontal">
+<form class="form-horizontal" name="cadastroForm" ng-controller="cadastroController">
 <fieldset>
 <div id="content"><br>
 <center><h2> Registro de Usuário AllDispor</h2></center><br>
@@ -24,42 +32,41 @@
 
 <div class="form-group">
   <label class="col-md-3 control-label" for="radios">Você é:</label>
-  <div class="campo"> 
+  <div class="campo">
     <label class="radio-inline" for="radios-0">
-    <input type="radio" name="tipos" value="instituicao" checked>
+    <input type="radio" name="tipos" value="instituicao" ng-checked="true" ng-model="cadastro.areaAtuacao" >
        Instituição de Ensino
-    </label> 
+    </label>
     <label class="radio-inline" for="radios-1">
-    <input type="radio" name="tipos" value="saude">
+    <input type="radio" name="tipos" value="saude" ng-model="cadastro.TipoInstituicao">
       Saude em Geral
-    </label> 
+    </label>
     <label class="radio-inline" for="radios-2">
-      <input type="radio" name="tipos" id="apoio" value="apoio">
+      <input type="radio" name="tipos" id="apoio" value="apoio" ng-model="cadastro.TipoInstituicao">
      Local de apoio
-    </label> 
-	
+    </label>
+
 	<br><center>
     <label class="radio-inline" for="radios-3">
-    <input type="radio" name="tipos" value="geral">
+    <input type="radio" name="tipos" value="geral" ng-model="cadastro.TipoInstituicao">
       Estabelecimento (Geral)
     </label>
     <label class="radio-inline" for="radios-4">
-    <input type="radio" name="tipos" value="rh">
+    <input type="radio" name="tipos" value="rh" ng-model="cadastro.TipoInstituicao">
       Recursos Humanos
     </label></center>
-	
+
   </div>
 </div>
 
-<!-- Select tipo de local --> 
+<!-- Select tipo de local -->
 <div class="form-group">
   <label class="col-md-3 control-label" for="selectbasic">Tipo: *</label>
   <div class="col-md-3">
-    <select id="tipos" name="" class="form-control">
+    <select id="tipos" name="" class="form-control" ng-model="cadastro.tipo" required>
       <option value="normal">Normal</option>
       <option value="tecnico">Tecnico</option>
-	  <option value="superior">Superior</option>
-	    
+	    <option value="superior">Superior</option>
     </select>
   </div>
 </div>
@@ -67,200 +74,186 @@
 
 <!-- nome empresa-->
 <div class="form-group">
-  <label class="col-md-3 control-label" for="textinput">Razão Social: * </label> 
+  <label class="col-md-3 control-label" for="textinput">Razão Social: * </label>
   <div class="col-md-7">
-  <input id="textinput" name="textinput" type="text"  class="form-control input-md "required>
-  
+  <input id="razao_social" name="razao_social" type="text"  class="form-control input-md" ng-model="cadastro.razao_social" required>
+
   </div>
 </div>
 
 <!-- cnpj-->
 <div class="form-group">
-  <label class="col-md-3 control-label" for="textinput">CNPJ: * </label>  
+  <label class="col-md-3 control-label" for="textinput">CNPJ: * </label>
   <div class="col-md-4">
- <input type="text" name="cnpj" id="cnpj" onkeyup="FormataCnpj(this,event)" maxlength="18"  class="form-control input-md"required />  
-</div>
+ <input type="cnpj" name="cnpj" id="cnpj" onKeypress="return numeros();" onkeyup="FormataCnpj(this,event)" onblur="if(!validarCNPJ(this.value)){alert('CNPJ Informado é inválido'); this.value='';}" maxlength="18"  class="form-control input-md" ng-model="cadastro.cnpj" required></div>
 </div>
 
 
-<!-- rua-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="textinput">Rua: * </label>  
-  <div class="col-md-7">
-  <input id="textinput" name="textinput" type="text"  class="form-control input-md"required>
-  </div>
-  </div>
-  
-  <!-- numero --> 
+
+	<!-- cep -->
+	<div class="form-group">
+	  <label class="col-md-3 control-label" for="textinput">CEP: * </label>
+	  <div class="col-md-2">
+	  <input id="cep" type="text" name="cep" onKeypress="return numeros();" onkeypress="mascara(this, '#####-###')" maxlength="9" class="form-control input-md" ng-model="cadastro.cep" required>
+	  </div>
+
+	  <!-- Cidade -->
+	  <label class="col-md-1 control-label" for="textinput">Cidade:* </label>
+	  <div class="col-md-4">
+	  	<input id="cidade" name="cidade" type="text" class="form-control input-md" ng-disabled="!cadastroForm.cep.$invalid" ng-model="cadastro.cidade" required>
+	  </div>
+	</div>
+
+  <!-- rua-->
+	<div class="form-group">
+	  <label class="col-md-3 control-label" for="textinput">Rua: * </label>
+	  <div class="col-md-7">
+	  <input id="rua" name="rua" type="text"  class="form-control input-md"  ng-model="cadastro.rua" ng-disabled="!cadastroForm.cep.$invalid" required>
+	  </div>
+	</div>
+
+	<!-- complemento -->
+ <div class="form-group">
+	<label class="col-md-3 control-label" for="textinput">Complemento: </label>
+	<div class="col-md-7">
+	<input id="complemento" name="complemento" type="text"  class="form-control input-md"  ng-model="cadastro.complemento">
+	</div>
+
+</div>
+
+
+  <!-- numero -->
   <div class="form-group">
-  <label class="col-md-3 control-label" for="textinput">Numero: * </label>  
-  <div class="col-md-2">
-  <input id="textinput" name="textinput" type="text"  class="form-control input-md"required>
-  </div>
-  
-  <!-- bairro --> 
-  <label class="col-md-1 control-label" for="textinput">Bairro:* </label>  
-  <div class="col-md-4">
-  <input id="textinput" name="textinput" type="text"  class="form-control input-md"required>
-  </div>
+	  <label class="col-md-3 control-label" for="textinput">Numero: * </label>
+	  <div class="col-md-2">
+	  <input id="numero" name="numero" type="text"  class="form-control input-md"  ng-model="cadastro.numero" required>
+	  </div>
+
+	  <!-- bairro -->
+	  <label class="col-md-1 control-label" for="textinput">Bairro:* </label>
+	  <div class="col-md-4">
+	  <input id="bairro" name="bairro" type="text"  class="form-control input-md"  ng-model="cadastro.bairro" ng-disabled="!cadastroForm.cep.$invalid" required>
+	  </div>
   </div>
 
-<!-- cep --> 
-<div class="form-group">
-  <label class="col-md-3 control-label" for="textinput">CEP: * </label>  
-  <div class="col-md-2">
-  <input type="text" name="cep" onkeypress="mascara(this, '#####-###')" maxlength="9" class="form-control input-md" required>
-  </div>
-
-  <!-- Cidade --> 
-  <label class="col-md-1 control-label" for="textinput">Cidade:* </label>  
-  <div class="col-md-4">
-  <input id="textinput" name="textinput" type="text" class="form-control input-md" required>
-  </div>
-</div>
-
-<!-- Select Estado --> 
+<!-- Select Estado -->
 <div class="form-group">
   <label class="col-md-3 control-label" for="estado">Estado: * </label>
   <div class="col-md-4">
-    <select id="estado" name="estado" class="form-control">
+    <!--<select id="estado" name="estado" class="form-control">
       <option value="sp">São Paulo</option>
       <option value="rs">Rio Grande do Sul</option>
-    </select>
+    </select>-->
+		<input id="estado" name="estado" type="text"  class="form-control input-md"  ng-model="cadastro.estado" ng-disabled="!cadastroForm.cep.$invalid" required>
   </div>
 </div>
 
-<!-- Telefone 1 --> 
+<!-- Telefone 1 -->
 <div class="form-group">
-  <label class="col-md-3 control-label" for="textinput">Telefone 1: *</label>  
+  <label class="col-md-3 control-label" for="textinput">Telefone 1: *</label>
   <div class="col-md-3">
-  <input type="tel" name="telefone" onkeypress="mascara(this, '## ####-####')" maxlength="12" class="form-control input-md" required>
-  </div>
+  <input id="telefone1" type="tel" name="phone" maxlength="12" onKeypress="return numeros();" onkeyup="mascara(this, '## ####-####')" class="form-control input-md" ng-model="cadastro.telefone1" pattern="[0-9]+$"  required></div>
 
-  <!-- Telefone 2 nao obrigatorio --> 
-  <label class="col-md-1 control-label" for="textinput">Telefone 2:</label>  
+  <!-- Telefone 2 nao obrigatorio -->
+  <label class="col-md-1 control-label" for="textinput">Telefone 2:</label>
   <div class="col-md-3">
-	<input type="tel" name="telefone" onkeypress="mascara(this, '## ####-####')"  maxlength="12" class="form-control input-md">  </div>
+	<input id="telefone2" type="tel" name="telefone2"  maxlength="12" onKeypress="return numeros();" onkeyup="mascara(this, '## ####-####')" class="form-control input-md" ng-model="cadastro.telefone2"></div>
 </div>
 
-<!-- Site - nao obrigatorio --> 
-<div class="form-group" id="frm" name="frm" method="post" action="">
-  <label class="col-md-3 control-label" for="textinput">Site:</label>  
+<!-- Email -->
+<div class="form-group">
+  <label class="col-md-3 control-label" for="site">Email: *</label>
   <div class="col-md-7">
-	<input type="textinput" name="site"  class="form-control input-md">  </div>
+	<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email *" ng-model="cadastro.email" required>  </div>
 </div>
 
 
-<br><center><h2>Detalhes de Acessibilidade do Local</h2></center><br>
+<!-- Site - nao obrigatorio -->
+<div class="form-group">
+  <label class="col-md-3 control-label" for="site">Site:</label>
+  <div class="col-md-7">
+	<input id="site" type="textinput" name="site"  class="form-control input-md" ng-model="cadastro.site">  </div>
+</div>
 
-<!-- Select item --> 
+
+<br><br><center><h2>Detalhes de Acessibilidade do Local</h2></center><br>
+
+<!-- Select item -->
 <div class="form-group">
   <label class="col-md-3 control-label" for="selectbasic">Item: *</label>
   <div class="col-md-3">
-    <select id="selectbasic" name="selectbasic" onchange='mostraCampo(this)' class="form-control">
+    <select id="selectbasic" name="selectbasic" onchange='mostraCampo(this)' class="form-control" ng-model="recurso.tipo">
       <option value="Banheiro">Banheiro</option>
       <option value="Rampa">Rampa</option>
 	  <option value="Elevador">Elevador</option>
 	  <option value="Vaga de Estacionamento">Vaga de Estacionamento</option>
-	  <option value="Outros">Outros</option>	  
+	  <option value="Outros">Outros</option>
     </select>
   </div>
-  
-  <!-- Input Outros --> 
- 
-  <div class="col-md-3">
-	<input type="textinput" id="outros" style='display:none' class="form-control input-md" placeholder = "Escreva Item" >  </div>
-  </div>
-  
 
-<!-- Quantidade Item --> 
+	<!-- Quantidade Item -->
+	<label class="col-md-1 control-label" for="textinput">Qtde:*</label>
+	<div class="col-md-2">
+	<input id="quantidade" name="textinput" onKeypress="return numeros();" type="number" class="form-control input-md" ng-model="recurso.quantidade">
+	</div>
+
+</div>
+
+	<!-- Input Outros -->
 <div class="form-group">
-<label class="col-md-3 control-label" for="textinput">Quantidade: *</label>  
+	<div class="col-md-3"></div>
   <div class="col-md-4">
-  <input id="quantidade" name="textinput" type="number" class="form-control input-md">
-  </div></div>
+	  <input type="textinput" id="outros" style='display:none' class="form-control input-md" placeholder = "Escreva Item" ng-model="recurso.detalhe">
+  </div>
 
-  <!-- Destalhes do item --> 
+</div>
+
+
+  <!-- Destalhes do item -->
 <div class="form-group">
   <label class="col-md-3 control-label" for="textarea">Detalhes do item: *</label>
-  <div class="col-md-5">                     
-    <textarea class="form-control" id="descricao" name="descricao" placeholder="Tamanho, inclinação..."></textarea>
+  <div class="col-md-7">
+    <textarea class="form-control" id="descricao" name="descricao" placeholder="Tamanho, inclinação..." ng-model="recurso.descricao"></textarea>
   </div>
 </div>
 
 
-<!-- Enviar arquivo --> 
+<!-- Enviar arquivo -->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="filebutton">Imagem de estrutura do local:</label>
-  <div class="col-md-4">
-    <input id="filebutton" name="filebutton" class="input-file" type="file">
+  <label class="col-md-4 control-label" for="filebutton">Estrutura do local:</label>
+  <div class="col-md-6">
+    <input id="filebutton" name="filebutton" class="input-file" type="file" ng-model="recurso.arquivo">
   </div>
 </div>
-
-
 <center>
-  <button type="button" class="btn btn-info" id="add">Adicionar mais itens</button>
+  <button type="button" class="btn btn-info" ng-click="adicionaRecurso(recurso)">Adicionar mais itens</button>
 </center>
 
-
-
-<br>
+<br><br>
 <center><h2>Dados de Acesso</h2></center><br>
 
 
 <div class="form-group">
-    <label class="col-md-4 control-label"  for="exampleInputEmail1">Email: *</label>
-	<div class="col-md-5">
-    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" required>
-  </div></div>
-  
-  <div class="form-group">
-    <label class="col-md-4 control-label"  for="exampleInputPassword1">Senha: *</label>
-	<div class="col-md-3">
-    <input type="password" class="form-control senha" id="senha" name = "senha" placeholder="Senha" required>
-  </div>
-  
-  </div>
-  
-  <div class="form-group">
-    <label class="col-md-4 control-label"  for="exampleInputPassword1">Confirmar Senha: *</label>
-	<div class="col-md-3">
-    <input type="password" class="form-control senha" id="confirar_senha" name = "confirmar_senha" placeholder="Repita Senha" oninput="check(this)" required >
-  </div>
-  </div>
+  <label class="col-md-4 control-label" for="textinput">Nome de Usuário: * </label>
+	<div class="col-md-4">
+		<input type="text" class="form-control" id="login" ng-model="cadastro.login" required>
+	</div>
+</div>
 
-  <center><button type="submit" class="btn btn-info" id="enviar">Salvar Dados</button>      <a href="index.html"><button type="cancel" class="btn btn-danger">Cancelar</a></button>
+  <div class="form-group">
+		<label class="col-md-4 control-label">Senha: *</label>
+		<div class="col-md-2">
+	    <input type="password" class="form-control senha" id="senha" name = "senha" ng-model="cadastro.senha" required>
+	  </div>
+
+	<div class="col-md-2">
+		<input type="password" class="form-control senha" id="confirar_senha" name = "confirmar_senha" placeholder="Repita Senha *" oninput="check(this)" ng-model="cadastro.senha2" required >
+	</div>
+
+  </div><br>
+  <center><button type="submit" class="btn btn-info" id="enviar" ng-click="efetuarCadastro(cadastro)">Salvar Dados</button>      <a href="index.html"><button type="cancel" class="btn btn-danger">Cancelar</a></button>
 </center></div>
-<script src="js/jquery.js"></script>
-<script>
-$(document).ready(function(){
-var recursos = [];
-var recurso = {nome:'',descricao: '', quantidade:''}
-
-$("#add").click(function(){
-debugger
-alert($("#selectbasic", "#descricao").val());
-	recurso = { nome:$("#selectbasic").val(), 
-				descricao: $("#descricao").val(),
-				quantidade: $("#quantidade").val()
-			  };  
-	alert(recurso.nome);
-	recursos.push(recurso);
-	$("#nome").val(""); 
-	$("#descricao").val("");
-	$("#quantidade").val("");
-});
-
-$("#enviar").click(function(){
-	if($(".senha").val().length > 6){
-		alert("Senha não pode ser maior que 6 caracteres");
-	}
-});
-});
-
-
- 
-</script> 
+<p>{{cadastro.error }}</p>
 <script src="js/selecao.js"></script>
 <script src="js/mascara.js"></script>
 
@@ -270,4 +263,3 @@ $("#enviar").click(function(){
 
 
 </html>
-

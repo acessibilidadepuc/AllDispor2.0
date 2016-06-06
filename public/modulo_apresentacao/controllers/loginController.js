@@ -11,10 +11,22 @@
     $scope.login = function(acesso){
       debugger
       loginApi.login(acesso).success(function(data){
-        localStorage.setItem('token', data);
-
-        window.location.assign("http://www.w3schools.com");
-
+        alert(data);
+        if(data != null){
+            localStorage.setItem('token', data.acesso.token);
+            if(data.permissao.tipoPermissao == "ADMIN")
+            {
+              alert("Bem vindo Sr." + data.acesso.login +", seu token: " + data.acesso.token);
+              //redirecionar para o módulo
+              window.location = "file:///C:/Users/USER/Desktop/modulos/index.html#/home";
+            }
+            else
+            {
+              alert("Bem vindo Sr." + data.acesso.login +", seu token: " + data.acesso.token);
+              //redirecionar para o módulo
+              window.location = "file:///C:/Users/USER/Desktop/modulos/index.html#/home";
+            }
+        }
       });
     }
 

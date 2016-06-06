@@ -1,11 +1,10 @@
 var Instituicao = require('../models/instituicao');
 
-exports.save = function(razao_social, cnpj, areaAtuacao, tipo,
+exports.save = function(tipo,razao_social, cnpj, areaAtuacao,
                         site, rua, numero, complemento, bairro,
-                        cep, cidade, estado, nomeServ, descServ,
-                        recursos, email, telefone, nomePermissao,
-                        tipoPermissao, login, senha, callback){
-
+                        cep, cidade, estado, servicos,
+                        recursos, email, telefone1, telefone2, nomePermissao,
+                        tipoPermissao, login, senha1, senha2, callback){
   Instituicao.findOne({'acesso.login':login}, function(erro, instituicao){
     if(erro){
       callback('Deu Erro')
@@ -14,10 +13,11 @@ exports.save = function(razao_social, cnpj, areaAtuacao, tipo,
     }else{
       //var obj = JSON.parse(recursos);
       var novaInstituicao = new Instituicao();
+
+          novaInstituicao.tipo = tipo;
           novaInstituicao.razao_social = razao_social;
           novaInstituicao.cnpj = cnpj;
           novaInstituicao.areaAtuacao = areaAtuacao;
-          novaInstituicao.tipo = tipo;
           novaInstituicao.site = site;
 
           novaInstituicao.endereco.rua = rua;
@@ -28,20 +28,21 @@ exports.save = function(razao_social, cnpj, areaAtuacao, tipo,
           novaInstituicao.endereco.cidade = cidade;
           novaInstituicao.endereco.estado = estado;
 
-          novaInstituicao.servicos.nome = nomeServ;
-          novaInstituicao.servicos.descricao = descServ;
-        //  console.log(obj);
+          novaInstituicao.servicos = servicos;
 
-          //novaInstituicao.recursos = obj;
+          novaInstituicao.recursos = recursos;
+
 
           novaInstituicao.contato.email = email;
-          novaInstituicao.contato.telefone = telefone;
+          novaInstituicao.contato.telefone1 = telefone1;
+          novaInstituicao.contato.telefone2 = telefone2;
 
           novaInstituicao.permissao.nome = nomePermissao;
           novaInstituicao.permissao.tipo = tipoPermissao;
 
           novaInstituicao.acesso.login = login;
-          novaInstituicao.acesso.senha = novaInstituicao.gerarSenha(senha);
+          novaInstituicao.acesso.senha1 = novaInstituicao.gerarSenha(senha1);
+          novaInstituicao.acesso.senha2 = novaInstituicao.gerarSenha(senha2);
           novaInstituicao.acesso.token = novaInstituicao.gerarToken(login);
 
       novaInstituicao.save(function(erro, instituicao){
@@ -61,7 +62,7 @@ exports.login = function(login, senha, callback){
       callback('Deu erro');
     }else if(instituicao){
       if(instituicao.validaSenha(senha)){
-        callback(instituicao.acesso.token);
+        callback(instituicao);
       }else{
         callback('dados incorretos');
       }
@@ -77,7 +78,7 @@ exports.list = function(token, callback){
     if(erro){
       callback('Deu erro');
     }else if(instituicao){
-      callback({'instituicao.acesso.login':instituicao.acesso.login});
+      callback({'instituicao':instituicao});
     }else{
       callback('Acesso não encontrado!');
     }

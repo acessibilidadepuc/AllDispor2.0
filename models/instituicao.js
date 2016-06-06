@@ -5,12 +5,13 @@ var jwt = require('jsonwebtoken');
 var Schema = mongoose.Schema;
 
 var InstituicaoSchema = new Schema({
+
+  tipo:String,
   razao_social:String,
   cnpj:String,
   areaAtuacao:String,
   tipo:String,
   site:String,
-
   endereco:{
     rua:String,
     numero:Number,
@@ -20,18 +21,25 @@ var InstituicaoSchema = new Schema({
     cidade:String,
     estado:String
   },
-  servicos:{
-    nome:String,
-    descricao:String
-  },
-  recursos:[{
-    descricao:String,
-    estrutura:String,
-    quantidade:Number
-  }],
+  servicos:[
+      {
+        nome:String,
+        descricao:String
+      }
+  ],
+  recursos:[
+      {
+        tipo:String,
+        detalhe:String,
+        arquivo:String,
+        descricao:String,
+        quantidade:Number
+      }
+  ],
   contato:{
-    email:String,
-    telefone:String
+    telefone1:String,
+    telefone2:String,
+    email:String
   },
   permissao:{
     nome:String,
@@ -39,7 +47,8 @@ var InstituicaoSchema = new Schema({
   },
   acesso:{
     login:String,
-    senha:String,
+    senha1:String,
+    senha2:String,
     token:String
   }
 });
@@ -56,7 +65,7 @@ InstituicaoSchema.methods.gerarSenha = function(senha){
 
 //comparar senha
 InstituicaoSchema.methods.validaSenha = function(senha){
-    return bcrypt.compareSync(senha, this.acesso.senha);
+    return bcrypt.compareSync(senha, this.acesso.senha2);
 }
 
 
